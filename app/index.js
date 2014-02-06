@@ -43,7 +43,7 @@ RequireJsGenerator.prototype.askForCSSFramework = function askForCSSFramework() 
     name: 'cssFramework',
     message: 'What CSS framework would you like to include?',
     choices: [{
-      name: 'SASS Bootstrap',
+      name: 'SASS Bootstrap with Font-Awesome',
       value: 'SASSBootstrap'
     }, {
       name: 'SASS Compass framework',
@@ -129,13 +129,13 @@ RequireJsGenerator.prototype.mainStylesheet = function mainStylesheet() {
       break;
     case 'SASSBootstrap':
       header += "$icon-font-path: '../bower_components/sass-bootstrap/fonts/';\n" +
-          "@import '../bower_components/sass-bootstrap/lib/bootstrap';\n";
+          "$fa-font-path: '../bower_components/font-awesome/fonts';\n" +
+          "@import '../bower_components/sass-bootstrap/lib/bootstrap';\n" +
+          "@import '../bower_components/font-awesome/scss/font-awesome';\n";
       break;
   }
-  if (this.cssFramework !== 'NativeBootstrap') {
-      header += "@import 'custom_mixins.scss';\n";
-      this.copy('_custom_mixins.scss', 'app/styles/_custom_mixins.scss');
-  }
+  header += "@import 'custom_mixins.scss';\n";
+  this.copy('_custom_mixins.scss', 'app/styles/_custom_mixins.scss');
   this.write('app/styles/' + cssFile, header + content);
 };
 

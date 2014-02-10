@@ -6,7 +6,7 @@ var yeoman = require('yeoman-generator');
 
 var RequireJsGenerator = module.exports = function RequireJsGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
-  
+
   // setup the test-framework property, Gruntfile template will need this
   this.testFramework = options['test-framework'] || 'mocha';
   this.coffee = options.coffee;
@@ -43,7 +43,7 @@ RequireJsGenerator.prototype.askForCSSFramework = function askForCSSFramework() 
     name: 'cssFramework',
     message: 'What CSS framework would you like to include?',
     choices: [{
-      name: 'SASS Bootstrap with Font-Awesome',
+      name: 'SASS Bootstrap',
       value: 'SASSBootstrap'
     }, {
       name: 'SASS Compass framework',
@@ -51,8 +51,44 @@ RequireJsGenerator.prototype.askForCSSFramework = function askForCSSFramework() 
     }]
   }];
 
-  this.prompt(prompts, function (props) {
+  this.prompt(prompts, function(props) {
     this.cssFramework = props.cssFramework;
+    cb();
+  }.bind(this));
+};
+
+RequireJsGenerator.prototype.askForCSSFile = function askForCSSFile() {
+  var cb = this.async();
+
+  var prompts = [{
+    type: 'checkbox',
+    name: 'cssFile',
+    message: 'What css library would you like to include?',
+    choices: [{
+      name: 'Buttons for SASS and Compass by Alexwolfe',
+      value: 'includeButtonCss',
+      checked: false
+    }, {
+      name: 'Animate SCSS',
+      value: 'includeAnimateCss',
+      checked: false
+    }, {
+      name: 'Bootstrap font-awesome',
+      value: 'includeFontAwesome',
+      checked: true
+    }]
+  }];
+
+  this.prompt(prompts, function(props) {
+    function includeCSS(css) {
+      return props.cssFile.indexOf(css) !== -1;
+    }
+
+    // CSS
+    this.includeButtonCss = includeCSS('includeButtonCss');
+    this.includeAnimateCss = includeCSS('includeAnimateCss');
+    this.includeFontAwesome = includeCSS('includeFontAwesome');
+
     cb();
   }.bind(this));
 };
@@ -67,7 +103,7 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     choices: [{
       name: 'Underscore.js',
       value: 'includeUnderscore',
-      checked: true
+      checked: false
     }, {
       name: 'Jasmine Testing framework',
       value: 'includeJasmine',
@@ -75,15 +111,19 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     }]
   }];
 
-  this.prompt(prompts, function (props) {
-    function includeJS(js) { return props.jsFile.indexOf(js) !== -1; }
+  this.prompt(prompts, function(props) {
+    function includeJS(js) {
+      return props.jsFile.indexOf(js) !== -1;
+    }
 
     // JS
     this.includeUnderscore = includeJS('includeUnderscore');
     this.includeJasmine = includeJS('includeJasmine');
 
-    if (this.includeJasmine) { this.testFramework = 'jasmine'; }
-    
+    if (this.includeJasmine) {
+      this.testFramework = 'jasmine';
+    }
+
     cb();
   }.bind(this));
 };
@@ -92,7 +132,7 @@ RequireJsGenerator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
 };
 
-RequireJsGenerator.prototype.packageJSON= function packageJSON() {
+RequireJsGenerator.prototype.packageJSON = function packageJSON() {
   this.template('_package.json', 'package.json');
 };
 
@@ -115,23 +155,32 @@ RequireJsGenerator.prototype.h5bp = function h5bp() {
 };
 
 RequireJsGenerator.prototype.mainStylesheet = function mainStylesheet() {
-  var cssFile = 'style.scss', header = '',
-      content = this.readFileAsString(path.join(this.sourceRoot(), 'main.scss'));
+  var cssFile = 'style.scss',
+    header = '',
+    content = this.readFileAsString(path.join(this.sourceRoot(), 'main.scss'));
 
-  if (this.cssFramework === 'SASSBootstrap' || this.cssFramework === 'NativeBootstrap') {
-      content += this.readFileAsString(path.join(this.sourceRoot(), 'bootstrap.css'));
+  if (this.cssFramework === 'SASSBootstrap') {
+    content += this.readFileAsString(path.join(this.sourceRoot(), 'bootstrap.css'));
+  }
+  if (this.includeFontAwesome) {
+    header += "$fa-font-path: '../bower_components/font-awesome/fonts';\n" +
+      "@import '../bower_components/font-awesome/scss/font-awesome';\n";
+  }
+  if (this.includeButtonCss) {
+    header += "@import '../bower_components/Buttons/scss/buttons';\n"
+  }
+  if (this.includeAnimateCss) {
+    header += "@import '../bower_components/animate-sass/animate';\n"
   }
 
-  switch(this.cssFramework) {
+  switch (this.cssFramework) {
     case 'CompassFramework':
-      header += "@import 'compass';\n" + 
+      header += "@import 'compass';\n" +
         "@import 'compass/reset';\n";
       break;
     case 'SASSBootstrap':
       header += "$icon-font-path: '../bower_components/sass-bootstrap/fonts/';\n" +
-          "$fa-font-path: '../bower_components/font-awesome/fonts';\n" +
-          "@import '../bower_components/sass-bootstrap/lib/bootstrap';\n" +
-          "@import '../bower_components/font-awesome/scss/font-awesome';\n";
+        "@import '../bower_components/sass-bootstrap/lib/bootstrap';\n";
       break;
   }
   header += "@import 'custom_mixins.scss';\n";
@@ -147,7 +196,6 @@ RequireJsGenerator.prototype.jsFile = function jsFile() {
 
 RequireJsGenerator.prototype.app = function app() {
   this.mkdir('app/images');
-  this.mkdir('app/partials');
   this.mkdir('app/scripts/vendor');
   this.mkdir('config');
   this.mkdir('test');
@@ -167,10 +215,9 @@ RequireJsGenerator.prototype.install = function install() {
       fs.exists(projectDir + '/scripts/vendor/require.js', function(exists) {
         if (!exists) {
           fs.createReadStream(projectDir + '/bower_components/requirejs/require.js')
-          .pipe(fs.createWriteStream(projectDir + '/scripts/vendor/require.js'));
+            .pipe(fs.createWriteStream(projectDir + '/scripts/vendor/require.js'));
         }
       });
     }
   });
 };
-

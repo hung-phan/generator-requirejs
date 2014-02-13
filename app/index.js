@@ -108,6 +108,10 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
       name: 'Jasmine Testing framework',
       value: 'includeJasmine',
       checked: true
+    }, {
+      name: 'Modernizr',
+      value: 'includeModernizr',
+      checked: false
     }]
   }];
 
@@ -119,6 +123,7 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     // JS
     this.includeUnderscore = includeJS('includeUnderscore');
     this.includeJasmine = includeJS('includeJasmine');
+    this.includeModernizr = includeJS('includeModernizr');
 
     if (this.includeJasmine) {
       this.testFramework = 'jasmine';

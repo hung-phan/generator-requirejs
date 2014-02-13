@@ -1,6 +1,7 @@
 define('main', [], function() {
     requirejs.config({
-        paths: {
+        paths: {<% if (includeModernizr) { %>
+            'modernizr': '../bower_components/modernizr/modernizr',<% } %>
             'jquery': '../bower_components/jquery/jquery',<% if (includeUnderscore) { %>
             'underscore': '../bower_components/underscore/underscore',<% } %><% if (cssFramework === 'SASSBootstrap') { %>
             'bootstrap': '../bower_components/sass-bootstrap/dist/js/bootstrap'<% } %>
@@ -12,7 +13,8 @@ define('main', [], function() {
 
     Window.name = 'NG_DEFER_BOOTSTRAP!';
 
-    requirejs([
+    requirejs([<% if (includeModernizr) { %>
+        'modernizr',<% } %>
         'jquery',<% if (includeUnderscore) { %> 
         'underscore',<% } %><% if (cssFramework === 'SASSBootstrap') { %>
         'bootstrap'<% } %>

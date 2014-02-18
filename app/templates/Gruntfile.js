@@ -7,7 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
@@ -24,7 +24,7 @@ module.exports = function (grunt) {
             app: 'app',
             dist: 'dist'
         },
-        
+
         // The actual grunt server settings
         connect: {
             options: {
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                     livereload: false
                 }
             }
-        },                         
+        },
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
@@ -83,8 +83,8 @@ module.exports = function (grunt) {
                 tasks: ['compass:server', 'autoprefixer']
             },
             //scripts: {
-                //files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                //tasks: ['sass:server', 'autoprefixer', 'concat']
+            //files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+            //tasks: ['sass:server', 'autoprefixer', 'concat']
             //},
             styles: {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.css'],
@@ -139,51 +139,57 @@ module.exports = function (grunt) {
                 'test/spec/{,*/}*.js'
             ]
         },
-        
+
         // Require js config
         bower: {
             target: {
                 rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
             }
-        }, 
-                    
+        },
+
         // require js
         requirejs: {
             dist: {
                 options: {
                     dir: "<%%= yeoman.dist %>/scripts/",
-                    baseUrl: '<%%= yeoman.app %>/scripts',                    // Directory to look for the require configuration file
-                    mainConfigFile: '<%%= yeoman.app %>/scripts/main.js',    // This is relative to the grunt file
-                    modules: [
-                        { name: 'main' }                // Create a global bundle
+                    baseUrl: '<%%= yeoman.app %>/scripts', // Directory to look for the require configuration file
+                    mainConfigFile: '<%%= yeoman.app %>/scripts/main.js', // This is relative to the grunt file
+                    modules: [{
+                            name: 'main'
+                        } // Create a global bundle
                     ],
-                    preserveLicenseComments: false,        // remove all comments
-                    removeCombined: true,                // remove files which aren't in bundles
-                    optimize: 'uglify',                    // minify bundles with uglify 2
+                    preserveLicenseComments: false, // remove all comments
+                    removeCombined: true, // remove files which aren't in bundles
+                    optimize: 'uglify', // minify bundles with uglify 2
                     useStrict: true
                 }
             }
         },
-<% if (testFramework === 'jasmine') { %>
-        // Jasmine testing framework configuration options
-        jasmine: {
-            pivotal: {
-                src: '<%%= yeoman.app %>/js/**/*.js',
-                options: {
-                    specs: 'test/spec/*Spec.js',
-                    helpers: 'test/spec/*Helper.js'
+        <%
+        if (testFramework === 'jasmine') { %>
+            // Jasmine testing framework configuration options
+            jasmine: {
+                pivotal: {
+                    src: '<%%= yeoman.app %>/js/**/*.js',
+                    options: {
+                        specs: 'test/spec/*Spec.js',
+                        helpers: 'test/spec/*Helper.js'
+                    }
                 }
-            }
-        },<% } else { %>
-        // Mocha tesing framework configuration options
-        mocha: {
-            all: {
-                options: {
-                    run: true,
-                    urls: ['http://<%%= connect.test.options.hostname %>:<%%= connect.test.options.port %>/index.html']
+            },
+            <%
+        } else { %>
+            // Mocha tesing framework configuration options
+            mocha: {
+                all: {
+                    options: {
+                        run: true,
+                        urls: ['http://<%%= connect.test.options.hostname %>:<%%= connect.test.options.port %>/index.html']
+                    }
                 }
-            }
-        },<% } %>
+            },
+            <%
+        } %>
         // Compiles Sass to CSS and generates necessary files if requested
         compass: {
             options: {
@@ -357,15 +363,15 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 files: [{
-                    src: '<%%= yeoman.app %>/scripts/*.js',  // source files mask
-                    dest: '<%%= yeoman.dist %>/scripts/',    // destination folder
-                    expand: true,    // allow dynamic building
-                    flatten: true   // remove all unnecessary nesting
+                    src: '<%%= yeoman.app %>/scripts/*.js', // source files mask
+                    dest: '<%%= yeoman.dist %>/scripts/', // destination folder
+                    expand: true, // allow dynamic building
+                    flatten: true // remove all unnecessary nesting
                 }]
             }
         },
         concat: {
-             dist: {
+            dist: {
                 src: ['.tmp/styles/{,*/}*.css'],
                 dest: '.tmp/styles/style.css'
             }
@@ -402,7 +408,7 @@ module.exports = function (grunt) {
                         '!main.js'
                     ]
                 }]
-            
+
             },
             styles: {
                 expand: true,
@@ -417,14 +423,18 @@ module.exports = function (grunt) {
         // Generates a custom Modernizr build that includes only the tests you
         // reference in your app
         modernizr: {
-            devFile: '<%%= yeoman.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%%= yeoman.dist %>/bower_components/modernizr/modernizr.js',
-            files: [
-                '<%%= yeoman.dist %>/scripts/{,*/}*.js',
-                '<%%= yeoman.dist %>/styles/{,*/}*.css',
-                '!<%%= yeoman.dist %>/scripts/vendor/*'
-            ],
-            uglify: true
+            dist: {
+                devFile: '<%%= yeoman.app %>/bower_components/modernizr/modernizr.js',
+                outputFile: '<%%= yeoman.dist %>/bower_components/modernizr/modernizr.js',
+                files: {
+                    src: [
+                        '<%%= yeoman.dist %>/scripts/{,*/}*.js',
+                        '<%%= yeoman.dist %>/styles/{,*/}*.css',
+                        '!<%%= yeoman.dist %>/scripts/vendor/*'
+                    ]
+                },
+                uglify: true
+            }
         },
 
         // Run some tasks in parallel to speed up build process
@@ -448,7 +458,7 @@ module.exports = function (grunt) {
     });
     grunt.registerTask('bundle-js', ['bower']);
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -463,7 +473,7 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('server', function () {
+    grunt.registerTask('server', function() {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run(['serve']);
     });
@@ -478,9 +488,12 @@ module.exports = function (grunt) {
         }
 
         grunt.task.run([
-            'connect:test',<% if (testFramework === 'mocha') { %>
-            'mocha'<% } else if (testFramework === 'jasmine') { %>
-            'jasmine'<% } %> 
+            'connect:test', <%
+            if (testFramework === 'mocha') { %>
+                    'mocha' <%
+            } else if (testFramework === 'jasmine') { %>
+                    'jasmine' <%
+            } %>
         ]);
     });
 
@@ -489,7 +502,8 @@ module.exports = function (grunt) {
             return string.substring(0, start) + what + string.substring(end);
         };
 
-        var mainjs = grunt.file.read('dist/scripts/main.js'), first, second, content;
+        var mainjs = grunt.file.read('dist/scripts/main.js'),
+            first, second, content;
 
         while (mainjs.indexOf('../bower_components') != -1) {
             first = mainjs.indexOf('../bower_components');
@@ -523,4 +537,4 @@ module.exports = function (grunt) {
         'test',
         'build'
     ]);
-};  
+};

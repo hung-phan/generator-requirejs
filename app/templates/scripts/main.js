@@ -11,8 +11,6 @@ define('main', [], function() {
         }
     });
 
-    Window.name = 'NG_DEFER_BOOTSTRAP!';
-
     requirejs([
         'jquery',<% if (includeModernizr) { %>
         'modernizr',<% } %><% if (includeUnderscore) { %> 
@@ -20,6 +18,10 @@ define('main', [], function() {
         'bootstrap'<% } %>
     ], function($) {
         'use strict';
-        /* App Module */
+
+        $(document).ready(function() {
+            /* App Module */
+        
+        });
     });
 });

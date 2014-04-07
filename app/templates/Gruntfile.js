@@ -222,7 +222,7 @@ module.exports = function(grunt) {
             dist: {
                  options: {
                     style: 'compressed'
-                }, 
+                },
                 files: [{
                     expand: true,
                     cwd: '<%%= yeoman.app %>/styles',
@@ -318,7 +318,6 @@ module.exports = function(grunt) {
                 options: {
                     cache: false
                 }
-
             }
         },
         svgmin: {

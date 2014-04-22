@@ -196,6 +196,7 @@ RequireJsGenerator.prototype.mainStylesheet = function mainStylesheet() {
 RequireJsGenerator.prototype.jsFile = function jsFile() {
   var prefix = 'app/scripts';
   this.mkdir(prefix);
+  this.copy('scripts/config.js', prefix + '/config.js');
   this.copy('scripts/main.js', prefix + '/main.js');
 };
 

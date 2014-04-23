@@ -15,6 +15,7 @@ For the reason that this name has been registered by another developer, you have
 Make sure you download the file
 
 ```
+$ cd generator-requirejs-master
 $ npm link
 ```
 

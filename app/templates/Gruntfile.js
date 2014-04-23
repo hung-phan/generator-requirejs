@@ -153,11 +153,8 @@ module.exports = function(grunt) {
                 options: {
                     dir: "<%%= yeoman.dist %>/scripts/",
                     baseUrl: '<%%= yeoman.app %>/scripts', // Directory to look for the require configuration file
-                    mainConfigFile: '<%%= yeoman.app %>/scripts/main.js', // This is relative to the grunt file
-                    modules: [{
-                            name: 'main'
-                        } // Create a global bundle
-                    ],
+                    mainConfigFile: '<%%= yeoman.app %>/scripts/config.js', // This is relative to the grunt file
+                    modules: [{ name: 'main' }], //create a global bundle
                     preserveLicenseComments: false, // remove all comments
                     removeCombined: true, // remove files which aren't in bundles
                     optimize: 'uglify', // minify bundles with uglify 2
@@ -408,6 +405,7 @@ module.exports = function(grunt) {
                     dest: '<%%= yeoman.dist %>/scripts/vendor',
                     src: [
                         '*.js',
+                        '!config.js',
                         '!main.js'
                     ]
                 }]
@@ -501,20 +499,15 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('requirejs-bundle', function() {
+        /*replace bower_components path in app/scripts/main.js file to vendor/*/
         function replaceBetween(string, start, end, what) {
             return string.substring(0, start) + what + string.substring(end);
         };
-
-        var mainjs = grunt.file.read('dist/scripts/main.js'),
-            first, second, content;
-
-        while (mainjs.indexOf('../bower_components') != -1) {
-            first = mainjs.indexOf('../bower_components');
-            second = mainjs.indexOf('"', first);
-            content = 'vendor/' + mainjs.substring(first, second).split('/').pop();
-            mainjs = replaceBetween(mainjs, first, second, content);
-        }
-        grunt.file.write('dist/scripts/main.js', mainjs);
+        var indexHTML = grunt.file.read('dist/index.html');
+        indexHTML = replaceBetween(indexHTML,
+            indexHTML.indexOf('<!--build script-->'),
+            indexHTML.indexOf('<!--end build script-->'), '');
+        grunt.file.write('dist/index.html', indexHTML);
     });
 
     grunt.registerTask('build', [
@@ -526,9 +519,9 @@ module.exports = function(grunt) {
         'requirejs',
         'copy:afterBuild',
         'clean:afterBuild',
-        'requirejs-bundle',
         // 'uglify',
         'copy:dist',
+        'requirejs-bundle',
         'modernizr',
         // 'rev',
         'usemin',

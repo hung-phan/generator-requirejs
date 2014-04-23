@@ -101,8 +101,8 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     name: 'jsFile',
     message: 'What utils would you like to include?',
     choices: [{
-      name: 'Underscore.js',
-      value: 'includeUnderscore',
+      name: 'Lodash.js',
+      value: 'includeLodash',
       checked: false
     }, {
       name: 'Jasmine Testing framework',
@@ -121,7 +121,7 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     }
 
     // JS
-    this.includeUnderscore = includeJS('includeUnderscore');
+    this.includeLodash = includeJS('includeLodash');
     this.includeJasmine = includeJS('includeJasmine');
     this.includeModernizr = includeJS('includeModernizr');
 

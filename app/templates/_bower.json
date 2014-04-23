@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "dependencies": {<% if (cssFramework === 'SASSBootstrap') { %>
     "sass-bootstrap": "*",<% } %><% if (includeFontAwesome) { %>
-    "font-awesome": "*",<% } %><% if (includeUnderscore) { %>
-    "underscore": "*",<% } %><% if (includeModernizr) { %>
+    "font-awesome": "*",<% } %><% if (includeLodash) { %>
+    "lodash": "*",<% } %><% if (includeModernizr) { %>
     "modernizr": "*",<% } %>
     "jquery": "*",<% if (includeButtonCss) { %>
     "Buttons": "*",<% } %><% if (includeAnimateCss) { %>

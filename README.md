@@ -11,7 +11,7 @@ To run this version of yeoman generator. First, make sure that you have already 
 $ npm install -g yo
 ```
 
-For the reason that this name has been register by another developer, you have to link the npm package manually.
+For the reason that this name has been registered by another developer, you have to link the npm package manually.
 Make sure you download the file
 
 ```

@@ -143,7 +143,7 @@ module.exports = function(grunt) {
         // Require js config
         bower: {
             target: {
-                rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
+                rjsConfig: '<%%= yeoman.app %>/scripts/config.js'
             }
         },
 

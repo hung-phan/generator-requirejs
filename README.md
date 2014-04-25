@@ -12,10 +12,11 @@ $ npm install -g yo
 ```
 
 For the reason that this name has been registered by another developer, you have to link the npm package manually.
-Make sure you download the file
+Make sure you clone the project
 
 ```
-$ cd generator-requirejs-master
+$ git clone git@github.com:hung-phan/generator-requirejs.git
+$ cd generator-requirejs
 $ npm link
 ```
 

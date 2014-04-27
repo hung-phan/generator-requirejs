@@ -10,6 +10,6 @@ requirejs.config({
         'lodash': {
             exports: '_'
         },<% } %>
-        'bootstrap': ['jquery'],
+        'bootstrap': ['jquery']
     }
 });

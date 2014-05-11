@@ -111,7 +111,7 @@ RequireJsGenerator.prototype.askForJSFile = function askForJSFile() {
     }, {
       name: 'Modernizr',
       value: 'includeModernizr',
-      checked: false
+      checked: true
     }]
   }];
 

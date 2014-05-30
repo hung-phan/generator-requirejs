@@ -1,6 +1,5 @@
 require([
-    'jquery',<% if (includeModernizr) { %>
-    'modernizr',<% } %><% if (includeLodash) { %>
+    'jquery',<% if (includeLodash) { %>
     'lodash',<% } %><% if (cssFramework === 'SASSBootstrap') { %>
     'bootstrap'<% } %>
 ], function($) {

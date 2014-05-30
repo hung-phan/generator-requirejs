@@ -213,6 +213,7 @@ RequireJsGenerator.prototype.install = function install() {
   }
 
   var done = this.async();
+  var self = this;
   this.installDependencies({
     skipMessage: this.options['skip-install-message'],
     skipInstall: this.options['skip-install'],
@@ -224,6 +225,17 @@ RequireJsGenerator.prototype.install = function install() {
             .pipe(fs.createWriteStream(projectDir + '/scripts/vendor/require.js'));
         }
       });
+
+      if (self.includeModernizr) {
+        //copy modernizr
+        fs.exists(projectDir + '/scripts/vendor/modernizr.js', function(exists) {
+          if (!exists) {
+            fs.createReadStream(projectDir + '/bower_components/modernizr/modernizr.js')
+            .pipe(fs.createWriteStream(projectDir + '/scripts/vendor/modernizr.js'));
+          }
+        });
+      }
+
     }
   });
 };

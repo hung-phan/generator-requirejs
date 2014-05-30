@@ -1,11 +1,10 @@
-// Generated on 2014-01-14 using generator-webapp 0.4.6
 'use strict';
 
 // # Globbing
 // for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
+// '{,*/}*.js'
 // use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
+// '**/*.js'
 
 module.exports = function(grunt) {
 
@@ -67,9 +66,7 @@ module.exports = function(grunt) {
             js: {
                 files: ['<%%= yeoman.app %>/scripts/{,*/}*.js'],
                 tasks: ['jshint'],
-                options: {
-                    livereload: true
-                }
+                options: { livereload: true }
             },
             jstest: {
                 files: ['test/spec/{,*/}*.js'],
@@ -82,10 +79,6 @@ module.exports = function(grunt) {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass:server', 'autoprefixer', 'concat']
             },
-            //scripts: {
-            //files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-            //tasks: ['sass:server', 'autoprefixer', 'concat']
-            //},
             styles: {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.css'],
                 tasks: ['newer:copy:styles', 'autoprefixer']
@@ -141,9 +134,13 @@ module.exports = function(grunt) {
         },
 
         // Require js config
-        bower: {
-            target: {
-                rjsConfig: '<%%= yeoman.app %>/scripts/config.js'
+        bower: { target: { rjsConfig: '<%%= yeoman.app %>/scripts/config.js' } },
+
+        // Automatically inject Bower components into the HTML file
+        'bower-install': {
+            app: {
+                html: '<%%= yeoman.app %>/index.html',
+                ignorePath: '<%%= yeoman.app %>/'
             }
         },
 
@@ -161,32 +158,29 @@ module.exports = function(grunt) {
                     useStrict: true
                 }
             }
-        },
-        <%
-        if (testFramework === 'jasmine') { %>
-            // Jasmine testing framework configuration options
-            jasmine: {
-                pivotal: {
-                    src: '<%%= yeoman.app %>/js/**/*.js',
-                    options: {
-                        specs: 'test/spec/*Spec.js',
-                        helpers: 'test/spec/*Helper.js'
-                    }
+        },<% if (testFramework === 'jasmine') { %>
+
+        // Jasmine testing framework configuration options
+        jasmine: {
+            pivotal: {
+                src: '<%%= yeoman.app %>/js/**/*.js',
+                options: {
+                    specs: 'test/spec/*Spec.js',
+                    helpers: 'test/spec/*Helper.js'
                 }
-            },
-            <%
-        } else { %>
-            // Mocha tesing framework configuration options
-            mocha: {
-                all: {
-                    options: {
-                        run: true,
-                        urls: ['http://<%%= connect.test.options.hostname %>:<%%= connect.test.options.port %>/index.html']
-                    }
+            }
+        },<% } else { %>
+
+        // Mocha tesing framework configuration options
+        mocha: {
+            all: {
+                options: {
+                    run: true,
+                    urls: ['http://<%%= connect.test.options.hostname %>:<%%= connect.test.options.port %>/index.html']
                 }
-            },
-            <%
-        } %>
+            }
+        },<% } %>
+
         // Compiles Sass to CSS and generates necessary files if requested
         compass: {
             options: {
@@ -214,40 +208,10 @@ module.exports = function(grunt) {
                 }
             }
         },
-        /*
-        sass: {
-            dist: {
-                 options: {
-                    style: 'compressed'
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
-            },
-            server: {
-                options: {
-                    debugInfo: true,
-                    style: 'expanded'
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
-            }
-        },
-        */
+
         // Add vendor prefixed styles
         autoprefixer: {
-            options: {
-                browsers: ['last 1 version']
-            },
+            options: { browsers: ['last 1 version'] },
             dist: {
                 files: [{
                     expand: true,
@@ -262,13 +226,6 @@ module.exports = function(grunt) {
             }
         },
 
-        // Automatically inject Bower components into the HTML file
-        'bower-install': {
-            app: {
-                html: '<%%= yeoman.app %>/index.html',
-                ignorePath: '<%%= yeoman.app %>/'
-            }
-        },
 
         // Renames files for browser caching purposes
         rev: {
@@ -288,17 +245,13 @@ module.exports = function(grunt) {
         // concat, minify and revision files. Creates configurations in memory so
         // additional tasks can operate on them
         useminPrepare: {
-            options: {
-                dest: '<%%= yeoman.dist %>'
-            },
+            options: { dest: '<%%= yeoman.dist %>' },
             html: '<%%= yeoman.app %>/index.html'
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
-            options: {
-                assetsDirs: ['<%%= yeoman.dist %>']
-            },
+            options: { assetsDirs: ['<%%= yeoman.dist %>'] },
             html: ['<%%= yeoman.dist %>/{,*/}*.html'],
             css: ['<%%= yeoman.dist %>/styles/{,*/}*.css']
         },
@@ -312,9 +265,7 @@ module.exports = function(grunt) {
                     src: '{,*/}*.{gif,jpeg,jpg,png}',
                     dest: '<%%= yeoman.dist %>/images'
                 }],
-                options: {
-                    cache: false
-                }
+                options: { cache: false }
             }
         },
         svgmin: {
@@ -396,21 +347,6 @@ module.exports = function(grunt) {
                     ]
                 }]
             },
-            afterBuild: {
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    dot: true,
-                    cwd: '<%%= yeoman.dist %>/scripts',
-                    dest: '<%%= yeoman.dist %>/scripts/vendor',
-                    src: [
-                        '*.js',
-                        '!config.js',
-                        '!main.js'
-                    ]
-                }]
-
-            },
             styles: {
                 expand: true,
                 dot: true,
@@ -442,7 +378,6 @@ module.exports = function(grunt) {
         concurrent: {
             server: [
                 'compass:server',
-                //'sass:server',
                 'copy:styles'
             ],
             test: [
@@ -450,7 +385,6 @@ module.exports = function(grunt) {
             ],
             dist: [
                 'compass',
-                //'sass:dist',
                 'copy:styles',
                 'imagemin',
                 'svgmin'
@@ -460,9 +394,7 @@ module.exports = function(grunt) {
     grunt.registerTask('bundle-js', ['bower']);
 
     grunt.registerTask('serve', function(target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
+        if (target === 'dist') { return grunt.task.run(['build', 'connect:dist:keepalive']); }
 
         grunt.task.run([
             'clean:server',
@@ -489,12 +421,9 @@ module.exports = function(grunt) {
         }
 
         grunt.task.run([
-            'connect:test', <%
-            if (testFramework === 'mocha') { %>
-                    'mocha' <%
-            } else if (testFramework === 'jasmine') { %>
-                    'jasmine' <%
-            } %>
+            'connect:test',<% if (testFramework === 'mocha') { %>
+            'mocha'<% } else if (testFramework === 'jasmine') { %>
+            'jasmine'<% } %>
         ]);
     });
 
@@ -517,12 +446,11 @@ module.exports = function(grunt) {
         'autoprefixer',
         'cssmin',
         'requirejs',
-        'copy:afterBuild',
         'clean:afterBuild',
         // 'uglify',
         'copy:dist',
-        'requirejs-bundle',
-        'modernizr',
+        'requirejs-bundle',<% if (includeModernizr) {%>
+        'modernizr',<% } %>
         // 'rev',
         'usemin',
         'htmlmin'

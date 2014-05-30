@@ -235,7 +235,6 @@ RequireJsGenerator.prototype.install = function install() {
           }
         });
       }
-
     }
   });
 };

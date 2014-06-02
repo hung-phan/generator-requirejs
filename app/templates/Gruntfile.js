@@ -154,7 +154,7 @@ module.exports = function(grunt) {
                     modules: [{ name: 'main' }], //create a global bundle
                     preserveLicenseComments: false, // remove all comments
                     removeCombined: true, // remove files which aren't in bundles
-                    optimize: 'uglify', // minify bundles with uglify 2
+                    optimize: 'none', // minify bundles with uglify 2
                     useStrict: true
                 }
             }
@@ -314,10 +314,8 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 files: [{
-                    src: '<%%= yeoman.app %>/scripts/*.js', // source files mask
-                    dest: '<%%= yeoman.dist %>/scripts/', // destination folder
-                    expand: true, // allow dynamic building
-                    flatten: true // remove all unnecessary nesting
+                    src: '<%%= yeoman.app %>/scripts/**/*.js', // source files mask
+                    expand: true // allow dynamic building
                 }]
             }
         },
@@ -447,10 +445,10 @@ module.exports = function(grunt) {
         'cssmin',
         'requirejs',
         'clean:afterBuild',
-        // 'uglify',
         'copy:dist',
         'requirejs-bundle',<% if (includeModernizr) {%>
         'modernizr',<% } %>
+        'uglify',
         // 'rev',
         'usemin',
         'htmlmin'

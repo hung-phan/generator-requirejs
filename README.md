@@ -9,12 +9,6 @@ To run this version of yeoman generator. First, make sure that you have already 
 
 ```bash
 $ npm install -g yo
-```
-
-For the reason that this name has been registered by another developer, you have to link the npm package manually.
-Make sure you clone the project
-
-```bash
 $ npm -g install hung-phan/generator-requirejs
 ```
 

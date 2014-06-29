@@ -136,14 +136,6 @@ module.exports = function(grunt) {
         // Require js config
         bower: { target: { rjsConfig: '<%%= yeoman.app %>/scripts/config.js' } },
 
-        // Automatically inject Bower components into the HTML file
-        'bower-install': {
-            app: {
-                html: '<%%= yeoman.app %>/index.html',
-                ignorePath: '<%%= yeoman.app %>/'
-            }
-        },
-
         // require js
         requirejs: {
             dist: {
